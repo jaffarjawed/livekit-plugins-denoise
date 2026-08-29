@@ -13,6 +13,14 @@ agents.
 This is an independent, community-maintained package and is not affiliated
 with or endorsed by LiveKit, Inc.
 
+## Why this exists
+
+LiveKit's managed `BVCTelephony` noise-cancellation option is billed per minute.
+This package is a self-hosted, MIT-licensed alternative for teams that want
+noise suppression and echo cancellation in their own agent process without a
+per-minute denoising charge. You still pay for your own compute, telephony, and
+other services.
+
 ## Install
 
 ```bash
