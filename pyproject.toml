@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "livekit-plugins-denoise"
+dynamic = ["version"]
+description = "Self-hosted noise and echo suppression for LiveKit SIP telephony"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "BotifyNow" }]
+requires-python = ">=3.10"
+keywords = [
+    "livekit",
+    "webrtc",
+    "sip",
+    "telephony",
+    "noise-cancellation",
+    "echo-cancellation",
+    "audio",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Communications :: Telephony",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    # AgentServer and the voice io.AudioOutput chain both landed by 1.6.
+    "livekit-agents>=1.6.0,<2.0",
+    # Imported directly for FrameProcessor, AudioProcessingModule and
+    # AudioResampler.flush, so pinned here rather than left to livekit-agents.
+    "livekit>=1.1.0,<2.0",
+    "numpy>=1.26",
+    # Pre-1.0 and the model geometry is read off it, so hold to the 0.1 line.
+    "deepfilter-stream>=0.1.0,<0.2",
+]
+
+[project.urls]
+Source = "https://github.com/jaffarjawed/livekit-plugins-denoise"
+Issues = "https://github.com/jaffarjawed/livekit-plugins-denoise/issues"
+
+[project.optional-dependencies]
+dev = [
+    "build>=1.2",
+    "pytest>=8",
+    # asyncio_mode below is only honoured from 0.21; 1.x is what this is tested on.
+    "pytest-asyncio>=1.0,<2",
+    "twine>=6",
+]
+
+[tool.hatch.version]
+path = "livekit/plugins/telephony_denoise/version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["livekit"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/livekit", "/tests", "/examples", "/README.md", "/LICENSE", "/NOTICE"]
+exclude = ["*.wav", "*.mp3", "*.flac", "*.m4a", "*.ogg", "*.png"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = ["slow: runs in real time and takes several seconds"]

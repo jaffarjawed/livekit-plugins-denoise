@@ -1,0 +1,11 @@
+livekit-plugins-denoise
+Copyright 2026 BotifyNow
+
+This package depends on deepfilter-stream, which bundles DeepFilterNet3 model
+weights. deepfilter-stream and DeepFilterNet are dual-licensed under MIT or
+Apache-2.0 at the recipient's option.
+
+DeepFilterNet attribution:
+H. Schröter, T. Rosenkranz, A. N. Escalante-B., and A. Maier,
+"DeepFilterNet: A Low Complexity Speech Enhancement Framework for Full-Band
+Audio based on Deep Filtering", IWAENC 2022.

@@ -1,0 +1,54 @@
+name: Publish LiveKit denoise plugin
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "telephony-denoise-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.13"]
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q
+      - if: matrix.python-version == '3.13'
+        run: python -m build
+      - if: matrix.python-version == '3.13'
+        run: python -m twine check dist/*
+      - if: matrix.python-version == '3.13'
+        uses: actions/upload-artifact@v4
+        with:
+          name: livekit-plugins-denoise-dist
+          path: dist/
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/telephony-denoise-v')
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/livekit-plugins-denoise
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: livekit-plugins-denoise-dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
