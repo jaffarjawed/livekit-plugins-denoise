@@ -62,7 +62,7 @@ path = "livekit/plugins/telephony_denoise/version.py"
 packages = ["livekit"]
 
 [tool.hatch.build.targets.sdist]
-include = ["/livekit", "/tests", "/examples", "/README.md", "/LICENSE", "/NOTICE"]
+include = ["/livekit", "/tests", "/examples", "/docs", "/README.md", "/LICENSE", "/NOTICE"]
 exclude = ["*.wav", "*.mp3", "*.flac", "*.m4a", "*.ogg", "*.png"]
 
 [tool.pytest.ini_options]
