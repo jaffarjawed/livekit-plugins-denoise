@@ -8,7 +8,8 @@ dynamic = ["version"]
 description = "Self-hosted noise and echo suppression for LiveKit SIP telephony"
 readme = "README.md"
 license = "MIT"
-authors = [{ name = "BotifyNow" }]
+authors = [{ name = "Jaffar Jawed" }]
+maintainers = [{ name = "Jaffar Jawed" }]
 requires-python = ">=3.10"
 keywords = [
     "livekit",
