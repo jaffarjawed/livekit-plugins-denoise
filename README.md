@@ -1,8 +1,17 @@
 # livekit-plugins-denoise
 
-Noise and echo suppression for LiveKit SIP calls that runs inside your own agent
-process. It uses WebRTC audio processing plus DeepFilterNet3, so it has no
-per-minute denoising fee and works independently of the caller's language.
+Self-hosted audio cleanup for LiveKit SIP calls, running inside your agent
+process.
+
+- **Noise suppression** removes hiss, fans, keyboards, café noise, and babble
+  with DeepFilterNet3 (or the lower-latency WebRTC suppressor).
+- **Acoustic echo cancellation** removes the agent's own audio when it returns
+  through a caller's handset or carrier path.
+- **High-pass filtering and automatic gain control** are available alongside
+  either capability.
+
+It has no per-minute denoising fee and works independently of the caller's
+language.
 
 This is an independent, community-maintained package. It is not affiliated with
 or endorsed by LiveKit, Inc.
@@ -57,6 +66,44 @@ await session.start(
 )
 
 # After start(), or RoomIO overwrites it.
+session.output.audio = telephony_denoise.EchoReferenceTap(
+    denoiser, next_in_chain=session.output.audio
+)
+```
+
+### Enable both echo cancellation and noise suppression
+
+Use one `TelephonyDenoiser` per call. The configuration below enables both
+features explicitly. `EchoReferenceTap` is required for echo cancellation: it
+feeds the agent's outgoing speech back to the denoiser at playout speed.
+
+```python
+from livekit.agents import room_io
+from livekit.plugins import telephony_denoise
+
+denoiser = telephony_denoise.TelephonyDenoiser(
+    telephony_denoise.DenoiseOptions(
+        echo_cancellation=True,
+        noise_suppression=True,
+        high_pass_filter=True,
+        auto_gain_control=True,
+        enhancer="deepfilter",  # use "webrtc" for lower latency
+        stream_delay_ms=120,
+    )
+)
+
+await session.start(
+    agent=agent,
+    room=room,
+    room_options=room_io.RoomOptions(
+        audio_input=room_io.AudioInputOptions(
+            noise_cancellation=denoiser,
+            auto_gain_control=False,  # avoid stacking AGC
+        ),
+    ),
+)
+
+# Add this after session.start(); RoomIO replaces the output during startup.
 session.output.audio = telephony_denoise.EchoReferenceTap(
     denoiser, next_in_chain=session.output.audio
 )
@@ -169,6 +216,12 @@ tests/
 ```
 
 ## Things worth knowing
+
+### Community
+
+Issues, bug reports, documentation improvements, and pull requests are welcome.
+Please include a focused reproduction or test when reporting or fixing an audio
+issue. This package is MIT licensed; see [LICENSE](LICENSE).
 
 ### Dependencies and licensing
 
