@@ -1,5 +1,5 @@
 livekit-plugins-denoise
-Copyright 2026 BotifyNow
+Copyright 2026 Jaffar Jawed
 
 This package depends on deepfilter-stream, which bundles DeepFilterNet3 model
 weights. deepfilter-stream and DeepFilterNet are dual-licensed under MIT or
