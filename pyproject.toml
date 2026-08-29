@@ -44,6 +44,7 @@ dependencies = [
 ]
 
 [project.urls]
+Homepage = "https://botcadence.com"
 Source = "https://github.com/jaffarjawed/livekit-plugins-denoise"
 Issues = "https://github.com/jaffarjawed/livekit-plugins-denoise/issues"
 

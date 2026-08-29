@@ -101,3 +101,5 @@ For tuning, supported formats, model download behavior, and operating notes, see
 Issues, documentation improvements, and pull requests are welcome. See
 [CONTRIBUTING.md](CONTRIBUTING.md). This project is MIT licensed; dependency
 attribution is in [NOTICE](NOTICE).
+
+Developed and maintained by [Botcadence](https://botcadence.com).
